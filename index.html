@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VJ - Weapon Attachments & Loadouts</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link class="a" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: #090b0e; 
+            color: #e2e8f0;
+            background-image: 
+                linear-gradient(rgba(234, 179, 8, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(234, 179, 8, 0.015) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-card { animation: cardEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-yellow-500 selection:text-black">
+
+    <div>
+        <header class="sticky top-0 z-50 bg-[#0d1017]/85 backdrop-blur-xl border-b border-gray-800/60 shadow-2xl">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3" onclick="resetFilters()">
+                    <div class="w-9 h-9 bg-yellow-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.3)] cursor-pointer">
+                        <i class="fa-solid fa-crosshairs text-black font-black text-lg"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tighter text-yellow-500 uppercase italic cursor-pointer transition hover:text-yellow-400">VJ</span>
+                </div>
+                
+                <nav class="hidden lg:flex items-center space-x-1.5 text-xs font-bold tracking-wider">
+                    <button data-cat="all" onclick="filterCategory('all')" class="cat-btn px-3.5 py-2 rounded-lg bg-yellow-500 text-black shadow-lg transition-all duration-200 cursor-pointer">ALL</button>
+                    <button data-cat="ar" onclick="filterCategory('ar')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">AR</button>
+                    <button data-cat="smg" onclick="filterCategory('smg')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">SMG</button>
+                    <button data-cat="sg" onclick="filterCategory('sg')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">SG</button>
+                    <button data-cat="mm" onclick="filterCategory('mm')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">MM</button>
+                    <button data-cat="sr" onclick="filterCategory('sr')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">SR</button>
+                    <button data-cat="lmg" onclick="filterCategory('lmg')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">LMG</button>
+                    <button data-cat="sec" onclick="filterCategory('sec')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">2ND</button>
+                    <button data-cat="fav" onclick="filterCategory('fav')" class="cat-btn px-3.5 py-2 rounded-lg text-red-400 border border-transparent hover:bg-red-500/10 transition-all duration-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-heart text-xs"></i> SAVED</button>
+                    <button data-cat="extras" onclick="filterCategory('extras')" class="cat-btn px-3.5 py-2 rounded-lg text-gray-400 border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer">EXTRAS</button>
+                </nav>
+            </div>
+        </header>
+
+        <section class="max-w-4xl mx-auto px-4 py-14 text-center">
+            <h1 class="text-4xl sm:text-5xl font-black text-white tracking-tight">
+                CODM <span class="text-yellow-500 drop-shadow-[0_0_20px_rgba(234,179,8,0.25)]">Loadouts</span>
+            </h1>
+            <div class="mt-3 flex justify-center gap-2">
+                <span class="text-yellow-500 text-[10px] uppercase tracking-widest font-black bg-yellow-500/10 px-3 py-1 rounded-md border border-yellow-500/20 shadow-sm">Casual Player</span>
+                <span id="fav-count-badge" class="text-red-400 text-[10px] uppercase tracking-widest font-black bg-red-500/10 px-3 py-1 rounded-md border border-red-500/20 shadow-sm hidden">0 Favorites</span>
+            </div>
+            
+            <p class="text-gray-400 max-w-xl mx-auto mt-5 text-sm sm:text-base leading-relaxed font-medium">
+                Instant database storage access containing my loadouts. Filter, view tactical attachment specs, or copy setups directly to your target devices. Happy Grinding!!
+            </p>
+
+            <div class="max-w-md mx-auto mt-8 relative group">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-yellow-500 transition-colors"></i>
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Type to filter loadouts (e.g., QQ9, Tundra)..." 
+                    class="w-full bg-[#11141c] border border-gray-800/80 focus:border-yellow-500/80 rounded-xl pl-11 pr-10 py-3 text-sm text-white placeholder-gray-500 outline-none transition-all focus:shadow-[0_0_25px_rgba(234,179,8,0.08)]">
+                <button onclick="clearSearch()" id="clear-search-btn" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors invisible">
+                    <i class="fa-solid fa-circle-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3.5 mt-6">
+                <a href="https://www.tiktok.com/@mlbnn.vj" target="_blank" class="flex items-center space-x-2 bg-white text-black hover:bg-yellow-500 transition px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transform hover:-translate-y-0.5">
+                    <i class="fab fa-tiktok text-base"></i>
+                    <span>Follow TikTok Account</span>
+                </a>
+            </div>
+        </section>
+
+        <div class="lg:hidden block bg-[#0e1118]/90 backdrop-blur-md py-3 px-4 sticky top-16 z-40 border-b border-gray-800 overflow-x-auto no-scrollbar whitespace-nowrap">
+            <div class="flex space-x-2">
+                <button data-mobile-cat="all" onclick="filterCategory('all')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-yellow-500 text-black font-black shadow-md">ALL</button>
+                <button data-mobile-cat="ar" onclick="filterCategory('ar')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">AR</button>
+                <button data-mobile-cat="smg" onclick="filterCategory('smg')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">SMG</button>
+                <button data-mobile-cat="sg" onclick="filterCategory('sg')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">SG</button>
+                <button data-mobile-cat="mm" onclick="filterCategory('mm')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">MM</button>
+                <button data-mobile-cat="sr" onclick="filterCategory('sr')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">SR</button>
+                <button data-mobile-cat="lmg" onclick="filterCategory('lmg')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">LMG</button>
+                <button data-mobile-cat="sec" onclick="filterCategory('sec')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">2ND</button>
+                <button data-mobile-cat="fav" onclick="filterCategory('fav')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-red-400 font-bold"><i class="fa-solid fa-heart text-[10px]"></i> SAVED</button>
+                <button data-mobile-cat="extras" onclick="filterCategory('extras')" class="mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold">EXTRAS</button>
+            </div>
+        </div>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div id="weapons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            </div>
+        </main>
+    </div>
+
+    <div id="attachment-modal" class="fixed inset-0 z-50 invisible flex items-center justify-center p-4 bg-black/95 backdrop-blur-md transition-all duration-200">
+        <div class="bg-[#10131c] w-full max-w-2xl rounded-2xl border border-gray-800/80 overflow-hidden transform scale-95 opacity-0 transition-all duration-200 shadow-2xl" id="modal-card">
+            
+            <div class="p-4 border-b border-gray-800/60 flex justify-between items-center bg-[#141924]">
+                <div class="flex items-center space-x-2.5">
+                    <span id="modal-gun-badge" class="text-[9px] font-black tracking-widest text-yellow-500 bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 rounded uppercase">AR</span>
+                    <h3 id="modal-gun-name" class="text-lg font-black tracking-wide text-white uppercase">Gun Model</h3>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl font-light p-1 transition cursor-pointer">&times;</button>
+            </div>
+
+            <div class="p-5 space-y-5">
+                <div class="w-full h-96 bg-[#07090d] rounded-xl flex items-center justify-center border border-gray-900 p-4 overflow-hidden relative group">
+                    <div class="absolute inset-0 bg-radial-gradient from-yellow-500/5 to-transparent pointer-events-none"></div>
+                    <div class="absolute top-3 right-3 z-10 bg-black/60 rounded-lg p-2 text-gray-400 pointer-events-none group-hover:text-yellow-500 transition-colors text-xs flex items-center gap-1.5 backdrop-blur-sm border border-gray-800/40">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i> Click to Zoom
+                    </div>
+                    <img id="modal-gun-img" src="" alt="Gun Screenshot" class="h-full w-full object-contain scale-105 transition-transform duration-500 group-hover:scale-110 cursor-zoom-in" onclick="openZoomOverlay(this.src, document.getElementById('modal-gun-name').innerText)">
+                </div>
+                
+                <div id="modal-stats-panel" class="bg-[#07090d] p-4 rounded-xl border border-gray-900/60 space-y-2.5">
+                    <h5 class="text-[10px] uppercase font-black text-gray-500 tracking-wider flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-chart-simple text-xs"></i> Performance Estimate Attributes
+                    </h5>
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                        <div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Mobility</span><span id="stat-val-mobility" class="text-yellow-500 font-bold">78</span></div>
+                            <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-mobility" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 78%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Range</span><span id="stat-val-range" class="text-yellow-500 font-bold">62</span></div>
+                            <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-range" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 62%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Control</span><span id="stat-val-control" class="text-yellow-500 font-bold">69</span></div>
+                            <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-control" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 69%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Accuracy</span><span id="stat-val-accuracy" class="text-yellow-500 font-bold">71</span></div>
+                            <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-accuracy" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 71%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xs uppercase tracking-widest text-yellow-500 font-black flex items-center gap-1.5">
+                            <i class="fa-solid fa-sliders text-xs"></i> Slots Configuration Specs
+                        </h4>
+                        <button id="copy-build-btn" onclick="copyBuildToClipboard()" class="text-[11px] text-gray-400 hover:text-yellow-500 flex items-center gap-1.5 transition bg-[#151922] px-3 py-1.5 rounded-lg border border-gray-800 cursor-pointer">
+                            <i class="fa-regular fa-copy"></i> Copy Setup
+                        </button>
+                    </div>
+                    <ul id="modal-attachments-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-300 font-medium">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="zoom-overlay" class="fixed inset-0 z-[60] bg-black/98 opacity-0 pointer-events-none transition-all duration-200 flex flex-col items-center justify-center p-4">
+        <button onclick="closeZoomOverlay()" class="absolute top-6 right-6 text-gray-400 hover:text-white text-4xl font-light transition cursor-pointer p-2 z-50">&times;</button>
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[#11141c]/90 text-yellow-500 font-black tracking-widest text-xs uppercase px-4 py-2 rounded-xl border border-gray-800/80 shadow-2xl backdrop-blur-sm" id="zoom-title">
+            Weapon View
+        </div>
+        <div class="w-full max-w-5xl h-[80vh] flex items-center justify-center select-none">
+            <img id="zoom-large-img" src="" alt="Zoomed Graphic" class="max-w-full max-h-full object-contain drop-shadow-[0_0_50px_rgba(234,179,8,0.1)] rounded-lg">
+        </div>
+    </div>
+
+    <footer class="text-center py-8 text-xs text-gray-600 border-t border-gray-950 tracking-wider bg-[#06080b]">
+        &copy; 2026 <span class="text-gray-500 font-bold">VJ's Bag</span>. Optimized for advanced layout screen widths.
+    </footer>
+
+    <script>
+        const weaponData = [
+            { id: "pk", name: "Peacekeeper MK2", category: "ar", img: "../img/pk.jpg", stats: {m: 88, r: 66, c: 51, a: 60}, builds: ["Muzzle: Agency Suppressor", "Barrel: TaskForce Barrel", "Stock: Agile Stock", "Underbarrel: Foregrip", "Ammunition: Double Stack Mag"] },
+            { id: "fr", name: "FR .556", category: "ar", img: "../img/fr.jpg", stats: {m: 60, r: 56, c: 44, a: 95}, builds: ["Tactical Suppressor", "OWC Ranger", "YKM Light Stock", "Extended Mag A", "Granulated Grip Tape"] },
+            { id: "hvk30", name: "HVK-30", category: "ar", img: "../img/hvk.jpg", stats: {m: 78, r: 51, c: 48, a: 63}, builds: ["YKM Integral Suppressor Heavy", "YKM Combat Stock", "Sleight of Hand", "Large Caliber Ammo", "Granulated Grip Tape"] },
+            { id: "kn44", name: "KN-44", category: "ar", img: "../img/kn.jpg", stats: {m: 80, r: 57, c: 52, a: 63}, builds: ["Tactical Suppressor", "OWC Ranger", "No Stock", "38 Round Fast Mag", "Granulated Grip Tape"] },
+            { id: "ram", name: "RAM-7", category: "ar", img: "../img/ram.jpg", stats: {m: 82, r: 60, c: 43, a: 45}, builds: ["RTC Light Muzzle Brake", "FORGE TAC Eclipse", "XRK Melee Stock", "50 Round Mag", "Tactical Foregrip"] },
+            { id: "grau", name: "Grau 5.56", category: "ar", img: "../img/grau.jpg", stats: {m: 80, r: 68, c: 60, a: 51}, builds: ["Tactical Suppressor", "Tempus 26.4 Archangel", "No Stock", "50 Round Mags", "Cronen Sniper Elite"] },
+            { id: "icr", name: "ICR-1", category: "ar", img: "../img/icr.jpg", stats: {m: 94, r: 54, c: 53, a: 62}, builds: ["YKM Integral Suppressor", "No Stock", "Strike Foregrip", "Fast Extended Mag B", "Stippled Grip Tape"] },
+            { id: "ak117", name: "AK-117", category: "ar", img: "../img/ak117.jpg", stats: {m: 70, r: 61, c: 40, a: 63}, builds: ["Monolithic Suppressor", "MIP Extended Light Barrel", "No Stock", "Tactical Foregrip A", "48 Round Extended Mag"] },
+            { id: "cr", name: "CR-56 AMAX", category: "ar", img: "../img/cr.jpg", stats: {m: 63, r: 62, c: 58, a: 61}, builds: ["Tactical Suppressor", "MIP Custom Long", "Disable", "Extended Mag A", "Granulated Grip Tape"] },
+            { id: "oden", name: "Oden", category: "ar", img: "../img/oden.jpg", stats: {m: 70, r: 64, c: 26, a: 60}, builds: ["Tactical Suppressor", "MIP Light Barrel (Short)", "YKM Light Stock", "Tactical Foregrip A", "Granulated Grip Tape"] },
+            { id: "ak", name: "AK-47", category: "ar", img: "../img/ak.jpg", stats: {m: 72, r: 66, c: 48, a: 74}, builds: ["Tactical Suppressor", "OWC Ranger", "No Stock", "5.45 Caliber Ammo", "Granulated Grip Tape"] },
+            { id: "ff", name: "FFAR 1", category: "ar", img: "../img/ff.jpg", stats: {m: 83, r: 58, c: 37, a: 39}, builds: ["Agency Suppressor", "19.5 Task Force", "SAS Combat Stock", "Salvo 44 Rnd Fast Mag", "Airborne Elastic Wrap"] },
+            { id: "m4", name: "M4", category: "ar", img: "../img/m4.jpg", stats: {m: 71, r: 77, c: 55, a: 65}, builds: ["Monolithic Suppressor", "OWC Marksman", "No Stock", "50 Round Extended Mag", "Granulated Grip Tape"] },
+            { id: "uss", name: "USS 9", category: "smg", img: "../img/uss.jpg", stats: {m: 95, r: 72, c: 61, a: 61}, builds: ["Monolithic Suppressor", "FSS Carbine Pro", "No Stock", ".41 AE 32-Round Mags", "Granulated Grip"] },
+            { id: "vmp", name: "VMP", category: "smg", img: "../img/vmp.jpg", stats: {m: 111, r: 53, c: 57, a: 37}, builds: ["Heavy Barrel", "Bandit Adjustable Pad", "Rapid Fire", "Fast Extended Mag", "Integrated Grip Set"] },
+            { id: "pp", name: "PP19 Bizon", category: "smg", img: "../img/pp.jpg", stats: {m: 98, r: 63, c: 60, a: 69}, builds: ["Monolithic Suppressor", "OWC Marksman", "No Stock", "Large Caliber Ammo A", "Granulated Grip Tape"] },
+            { id: "cbr", name: "CBR4", category: "smg", img: "../img/cbr.jpg", stats: {m: 91, r: 55, c: 38, a: 48}, builds: ["Monolithic Suppressor", "MIP Extended Light Barrel", "YKM Light Stock", "Disable", "Granulated Grip Tape"] },
+            { id: "fennec", name: "Fennec", category: "smg", img: "../img/fennec.jpg", stats: {m: 97, r: 55, c: 31, a: 35}, builds: ["Monolithic Suppressor", "MIP Extended Light Barrel", "RTC Steady Stock", "Operator Foregrip", "Extended Mag A"] },
+            { id: "qq9", name: "QQ9", category: "smg", img: "../img/qq9.jpg", stats: {m: 106, r: 58, c: 31, a: 32}, builds: ["Monolithic Suppressor", "RTC Recon Tac Long", "No Stock", "10mm 30 Round Reload", "Stippled Grip Tape"] },
+            { id: "sb", name: "Switchblade X9", category: "smg", img: "../img/sb.jpg", stats: {m: 94, r: 50, c: 42, a: 65}, builds: ["Tactical Suppressor", "MIP Extended Light Barrel", "RTC Steady Stock", "Extended Mag A", "Granulated Grip Tape"] },
+            { id: "gks", name: "GKS", category: "smg", img: "../img/gks.jpg", stats: {m: 89, r: 58, c: 55, a: 71}, builds: ["Monolithic Suppressor", "MIP Light Barrel (Short)", "RTC Steady Stock", "40 Round Extended Mag", "Granulated Grip Tape"] },
+            { id: "rus", name: "RUS-79U", category: "smg", img: "../img/rus.jpg", stats: {m: 92, r: 62, c: 54, a: 56}, builds: ["Monolithic Suppressor", "OWC Marksman", "No Stock", "38 Round Fast Reload", "Granulated Grip Tape"] },
+            { id: "mac", name: "MAC-10", category: "smg", img: "../img/mac.jpg", stats: {m: 100, r: 47, c: 31, a: 39}, builds: ["Agency Suppressor", "Taskforce Barrel", "Steel Stock", "Field Agent Foregrip", "STANAG 53 Round Extended Reload"] },
+            { id: "krm", name: "KRM-262", category: "sg", img: "../img/krm.jpg", stats: {m: 76, r: 53, c: 36, a: 55}, builds: ["Marauder Suppressor", "RTC Light Extended Barrel", "No Stock", "MIP Laser 5mW", "Speed Up Kill"] },
+            { id: "striker", name: "Striker", category: "sg", img: "../img/striker.jpg", stats: {m: 77, r: 38, c: 37, a: 49}, builds: ["Choke", "Light Barrel (Short)", "YKM Light Stock", "RTC Laser 1mW", "16 Round Extended Reload Case"] },
+            { id: "dlq", name: "DL Q33", category: "sr", img: "../img/dlq.jpg", stats: {m: 40, r: 92, c: 27, a: 52}, builds: ["OWC Light Suppressor", "MIP Light", "YKM Combat Stock", "FMJ"] },
+            { id: "tundra", name: "LW3-Tundra", category: "sr", img: "../img/tundra.jpg", stats: {m: 41, r: 46, c: 32, a: 68}, builds: ["Tactical Suppressor", "28.2\" Tiger Team", "FMJ", "7 Rnd Mag", "Serpent Wrap"] },
+            { id: "locus", name: "Locus", category: "sr", img: "../img/locus.jpg", stats: {m: 49, r: 95, c: 24, a: 49}, builds: ["YKM Lightweight Short", "OWC Skeleton Stock", "FMJ", "10 Round Reload", "Stippled Grip Tape"] },
+            { id: "chopper", name: "Chopper", category: "lmg", img: "../img/chopper.jpg", stats: {m: 48, r: 60, c: 55, a: 53}, builds: ["Monolithic Suppressor", "Chopper Infantry", "Disable", "OWC Laser - Tactical", "Heavy Handle"] },
+            { id: "s36", name: "S36", category: "lmg", img: "../img/s36.jpg", stats: {m: 69, r: 46, c: 42, a: 46}, builds: ["YKM Light Flash Guard", "Compagnie Generale Sevier - Light Barrel", "YKM Light Stock", "Disable", "Granulated Grip Tape"] },
+            { id: "holger", name: "Holger 26", category: "lmg", img: "../img/holger.jpg", stats: {m: 87, r: 53, c: 55, a: 55}, builds: ["OWC Light Suppressor", "No Stock", "Disable", "Granulated Grip Tape", "Holger-26c Lightweight Polymer Mag"] },
+            { id: "pistol", name: "Machine Pistol", category: "sec", img: "../img/pistol.jpg", stats: {m: 111, r: 24, c: 60, a: 38}, builds: ["Mercury Silencer", "VDD 35MM Short", "Rapid Action", "7.62 GORENKO 40 Round Mags", "Stippled Grip"] },
+            { id: "j", name: "J358", category: "sec", img: "../img/j.jpg", stats: {m: 93, r: 66, c: 60, a: 71}, builds: ["MIP Light Flash Guard", "J358 Short", "Lightweight Trigger", "Topping Power Reload", "Stippled Grip Tape"] },
+            { id: "acc", name: "My Account", category: "extras", img: "../img/acc.jpg", builds: [":)"] },
+            { id: "ss", name: "ScoreStreaks", category: "extras", img: "../img/ss.jpg", builds: ["<3"] },
+        ];
+
+        let currentCategory = 'all';
+        let activeSelectedGunBuild = null;
+        let savedFavorites = JSON.parse(localStorage.getItem('vj_favorites')) || [];
+
+        function saveFavoritesToStorage() {
+            localStorage.setItem('vj_favorites', JSON.stringify(savedFavorites));
+            updateFavoritesBadge();
+        }
+
+        function toggleFavorite(e, id) {
+            e.stopPropagation();
+            const index = savedFavorites.indexOf(id);
+            if (index > -1) {
+                savedFavorites.splice(index, 1);
+            } else {
+                savedFavorites.push(id);
+            }
+            saveFavoritesToStorage();
+            
+            if (currentCategory === 'fav') {
+                applyFilters();
+            } else {
+                const icon = document.getElementById(`fav-icon-${id}`);
+                if (icon) {
+                    icon.className = savedFavorites.includes(id) ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart text-gray-400 group-hover/fav:text-red-400";
+                }
+            }
+        }
+
+        function updateFavoritesBadge() {
+            const badge = document.getElementById('fav-count-badge');
+            if (savedFavorites.length > 0) {
+                badge.innerText = `${savedFavorites.length} Saved`;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function loadWeaponsGrid(items) {
+            const grid = document.getElementById('weapons-grid');
+            grid.innerHTML = ''; 
+
+            if(items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-[#11141c]/40 rounded-2xl border border-gray-900/60 p-8">
+                        <i class="fa-solid fa-circle-info text-2xl text-gray-600 mb-2"></i>
+                        <div class="text-gray-500 font-bold tracking-wide text-sm">No loadouts matches your active console query parameters.</div>
+                    </div>`;
+                return;
+            }
+
+            items.forEach((gun, idx) => {
+                const isFav = savedFavorites.includes(gun.id);
+                const card = document.createElement('div');
+                card.className = "bg-[#11141c] rounded-2xl border border-gray-900/80 hover:border-yellow-500/80 p-5 flex flex-col justify-between cursor-pointer hover:shadow-[0_0_30px_rgba(234,179,8,0.06)] hover:-translate-y-1 transition-all duration-300 opacity-0 group animate-card";
+                card.style.animationDelay = `${idx * 30}ms`;
+                card.onclick = () => openModal(gun);
+
+                let statsHtml = '';
+                if (gun.id !== 'acc') {
+                    statsHtml = `
+                        <div class="mt-3 pt-3 border-t border-gray-900/60 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] text-gray-400">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-500">Mobility</span>
+                                <span class="font-bold text-gray-300">${gun.stats?.m || 50}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-500">Control</span>
+                                <span class="font-bold text-gray-300">${gun.stats?.c || 50}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="relative w-full h-96 flex items-center justify-center p-4 bg-[#07090d] rounded-xl border border-gray-950 overflow-hidden">
+                        <div class="absolute top-2.5 left-2.5 z-10 bg-black/40 px-2 py-0.5 rounded backdrop-blur-sm border border-gray-800/20">
+                            <span class="text-[9px] text-yellow-500 font-black tracking-widest uppercase">${gun.category === 'sec' ? '2nd' : gun.category}</span>
+                        </div>
+                        <button onclick="toggleFavorite(event, '${gun.id}')" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-[#11141c]/80 border border-gray-800/80 flex items-center justify-center hover:scale-105 active:scale-95 group/fav transition">
+                            <i id="fav-icon-${gun.id}" class="${isFav ? 'fa-solid fa-heart text-red-500' : 'fa-regular fa-heart text-gray-400 group-hover/fav:text-red-400'} text-xs"></i>
+                        </button>
+                        
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition duration-300 z-1">
+                            <div class="bg-black/70 text-yellow-500 opacity-0 group-hover:opacity-100 px-3 py-1.5 rounded-xl border border-yellow-500/20 text-xs font-bold transition flex items-center gap-1.5 shadow-xl scale-90 group-hover:scale-100 duration-300">
+                                <i class="fa-solid fa-sliders"></i> View Build Setup
+                            </div>
+                        </div>
+
+                        <img src="${gun.img}" alt="${gun.name}" class="h-full w-full object-contain scale-105 transform transition duration-500" 
+                            onerror="this.src='https://placehold.co/400x300/11141c/e2e8f0?text=${encodeURIComponent(gun.name)}'">
+                    </div>
+                    
+                    <div class="mt-4 flex flex-col flex-grow justify-between">
+                        <div class="flex items-start justify-between gap-2">
+                            <h3 class="text-base font-black text-white group-hover:text-yellow-500 transition line-clamp-1">${gun.name}</h3>
+                            <span class="text-[10px] text-gray-500 font-bold bg-gray-900 px-1.5 py-0.5 rounded border border-gray-800/40">${gun.builds.length} Slots</span>
+                        </div>
+                        ${statsHtml}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function applyFilters() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+            const clearBtn = document.getElementById('clear-search-btn');
+            
+            clearBtn.style.visibility = searchQuery.length > 0 ? 'visible' : 'hidden';
+            
+            const filtered = weaponData.filter(gun => {
+                const matchesCategory = (currentCategory === 'all') || 
+                                        (currentCategory === 'fav' && savedFavorites.includes(gun.id)) || 
+                                        (gun.category === currentCategory);
+                const matchesSearch = gun.name.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+            
+            loadWeaponsGrid(filtered);
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            applyFilters();
+
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.getAttribute('data-cat') === category) {
+                    btn.className = "cat-btn px-3.5 py-2 rounded-lg bg-yellow-500 text-black font-bold shadow-lg transition-all duration-200 cursor-pointer";
+                } else {
+                    if (btn.getAttribute('data-cat') === 'fav') {
+                        btn.className = "cat-btn px-3.5 py-2 rounded-lg text-red-400 font-bold border border-transparent hover:bg-red-500/10 transition-all duration-200 cursor-pointer flex items-center gap-1";
+                    } else {
+                        btn.className = "cat-btn px-3.5 py-2 rounded-lg text-gray-400 font-bold border border-transparent hover:text-white hover:bg-gray-800/40 transition-all duration-200 cursor-pointer";
+                    }
+                }
+            });
+
+            document.querySelectorAll('.mobile-cat-btn').forEach(btn => {
+                if(btn.getAttribute('data-mobile-cat') === category) {
+                    btn.className = "mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-yellow-500 text-black font-black shadow-md";
+                } else {
+                    if (btn.getAttribute('data-mobile-cat') === 'fav') {
+                        btn.className = "mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-red-400 font-bold shadow-sm";
+                    } else {
+                        btn.className = "mobile-cat-btn px-4 py-2 rounded-xl text-xs bg-[#151922] text-gray-400 font-bold shadow-sm";
+                    }
+                }
+            });
+        }
+
+        function handleSearch() {
+            applyFilters();
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            applyFilters();
+            document.getElementById('search-input').focus();
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            filterCategory('all');
+        }
+
+        const modal = document.getElementById('attachment-modal');
+        const modalCard = document.getElementById('modal-card');
+
+        function openModal(gun) {
+            activeSelectedGunBuild = gun;
+            document.getElementById('modal-gun-name').innerText = gun.name;
+            
+            const badge = document.getElementById('modal-gun-badge');
+            badge.innerText = gun.category === 'sec' ? '2nd' : gun.category;
+
+            const modalImg = document.getElementById('modal-gun-img');
+            modalImg.src = gun.img;
+            modalImg.onerror = function() { this.src = 'https://placehold.co/400x300/07090d/e2e8f0?text=' + encodeURIComponent(gun.name); };
+
+            const statsPanel = document.getElementById('modal-stats-panel');
+          if (gun.category === 'extras') {
+                statsPanel.classList.add('hidden');
+            } else {
+                statsPanel.classList.remove('hidden');
+                const s = gun.stats || {m: 50, r: 50, c: 50, a: 50};
+                
+                document.getElementById('stat-val-mobility').innerText = s.m;
+                document.getElementById('stat-bar-mobility').style.width = `${s.m}%`;
+                
+                document.getElementById('stat-val-range').innerText = s.r;
+                document.getElementById('stat-bar-range').style.width = `${s.r}%`;
+                
+                document.getElementById('stat-val-control').innerText = s.c;
+                document.getElementById('stat-bar-control').style.width = `${s.c}%`;
+                
+                document.getElementById('stat-val-accuracy').innerText = s.a;
+                document.getElementById('stat-bar-accuracy').style.width = `${s.a}%`;
+            }
+
+            const copyBtn = document.getElementById('copy-build-btn');
+            copyBtn.innerHTML = `<i class="fa-regular fa-copy"></i> Copy Setup`;
+            copyBtn.className = "text-[11px] text-gray-400 hover:text-yellow-500 flex items-center gap-1.5 transition bg-[#151922] px-3 py-1.5 rounded-lg border border-gray-800 cursor-pointer";
+
+            const listContainer = document.getElementById('modal-attachments-list');
+            listContainer.innerHTML = '';
+            
+            gun.builds.forEach(att => {
+                const li = document.createElement('li');
+                li.className = "bg-[#07090d] border border-gray-900 p-3 rounded-xl flex items-center space-x-2.5 shadow-sm";
+                li.innerHTML = `
+                    <div class="w-5 h-5 rounded-md bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20 text-yellow-500 text-[10px]"><i class="fa-solid fa-plus"></i></div>
+                    <span class="tracking-wide text-gray-200">${att}</span>`;
+                listContainer.appendChild(li);
+            });
+
+            modal.classList.remove('invisible');
+            setTimeout(() => {
+                modalCard.classList.remove('scale-95', 'opacity-0');
+                modalCard.classList.add('scale-100', 'opacity-100');
+            }, 20);
+        }
+
+        function closeModal() {
+            modalCard.classList.remove('scale-100', 'opacity-100');
+            modalCard.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('invisible');
+                activeSelectedGunBuild = null;
+            }, 150);
+        }
+
+        function copyBuildToClipboard() {
+            if (!activeSelectedGunBuild) return;
+            
+            const buildText = `${activeSelectedGunBuild.name} Loadout Setup:\n` + activeSelectedGunBuild.builds.map(b => `• ${b}`).join('\n');
+            
+            navigator.clipboard.writeText(buildText).then(() => {
+                const copyBtn = document.getElementById('copy-build-btn');
+                copyBtn.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
+                copyBtn.className = "text-[11px] text-green-400 flex items-center gap-1.5 bg-green-500/10 px-3 py-1.5 rounded-lg border border-green-500/20 pointer-events-none";
+            }).catch(err => {
+                console.error('Failed processing copy allocation: ', err);
+            });
+        }
+
+        const zoomOverlay = document.getElementById('zoom-overlay');
+        const zoomLargeImg = document.getElementById('zoom-large-img');
+        const zoomTitle = document.getElementById('zoom-title');
+
+        function openZoomOverlay(src, title) {
+            zoomLargeImg.src = src;
+            zoomTitle.innerText = title;
+            zoomOverlay.classList.remove('pointer-events-none', 'opacity-0');
+            zoomOverlay.classList.add('opacity-100');
+        }
+
+        function closeZoomOverlay() {
+            zoomOverlay.classList.add('pointer-events-none', 'opacity-0');
+            zoomOverlay.classList.remove('opacity-100');
+        }
+
+        window.onclick = function(e) {
+            if (e.target === modal) {
+                closeModal();
+            } else if (e.target === zoomOverlay || e.target === zoomLargeImg.parentElement) {
+                closeZoomOverlay();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeZoomOverlay();
+                closeModal();
+            }
+        });
+
+        updateFavoritesBadge();
+        loadWeaponsGrid(weaponData);
+    </script>
+</body>
+</html>
