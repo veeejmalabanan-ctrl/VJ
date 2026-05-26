@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VJ - Weapon Attachments & Loadouts</title>
+    <title>VJ's Bag - Weapon Attachments & Loadouts</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link class="a" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html { scroll-behavior: smooth; }
         body { 
-           
             background-color: #090b0e; 
             color: #e2e8f0;
             background-image: 
@@ -36,7 +35,7 @@
                     <div class="w-9 h-9 bg-yellow-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.3)] cursor-pointer">
                         <i class="fa-solid fa-crosshairs text-black font-black text-lg"></i>
                     </div>
-                    <span class="text-2xl font-black tracking-tighter text-yellow-500 uppercase italic cursor-pointer transition hover:text-yellow-400">VJ</span>
+                    <span class="text-2xl font-black tracking-tighter text-yellow-500 uppercase italic cursor-pointer transition hover:text-yellow-400">VJ's Bag</span>
                 </div>
                 
                 <nav class="hidden lg:flex items-center space-x-1.5 text-xs font-bold tracking-wider">
@@ -56,15 +55,15 @@
 
         <section class="max-w-4xl mx-auto px-4 py-14 text-center">
             <h1 class="text-4xl sm:text-5xl font-black text-white tracking-tight">
-                CODM <span class="text-yellow-500 drop-shadow-[0_0_20px_rgba(234,179,8,0.25)]">Loadouts</span>
+                Optimize Your <span class="text-yellow-500 drop-shadow-[0_0_20px_rgba(234,179,8,0.25)]">Mobile Loadouts</span>
             </h1>
             <div class="mt-3 flex justify-center gap-2">
-                <span class="text-yellow-500 text-[10px] uppercase tracking-widest font-black bg-yellow-500/10 px-3 py-1 rounded-md border border-yellow-500/20 shadow-sm">Casual Player</span>
+                <span class="text-yellow-500 text-[10px] uppercase tracking-widest font-black bg-yellow-500/10 px-3 py-1 rounded-md border border-yellow-500/20 shadow-sm">Casual Vault V2</span>
                 <span id="fav-count-badge" class="text-red-400 text-[10px] uppercase tracking-widest font-black bg-red-500/10 px-3 py-1 rounded-md border border-red-500/20 shadow-sm hidden">0 Favorites</span>
             </div>
             
             <p class="text-gray-400 max-w-xl mx-auto mt-5 text-sm sm:text-base leading-relaxed font-medium">
-                Instant database storage access containing my loadouts. Filter, view tactical attachment specs, or copy setups directly to your target devices. Happy Grinding!!
+                Instant database storage access containing my premium meta-tuned configuration loadouts. Filter, view tactical attachment specs, or copy setups directly to your target devices.
             </p>
 
             <div class="max-w-md mx-auto mt-8 relative group">
@@ -79,7 +78,7 @@
             <div class="flex flex-wrap justify-center gap-3.5 mt-6">
                 <a href="https://www.tiktok.com/@mlbnn.vj" target="_blank" class="flex items-center space-x-2 bg-white text-black hover:bg-yellow-500 transition px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transform hover:-translate-y-0.5">
                     <i class="fab fa-tiktok text-base"></i>
-                    <span>Follow TikTok Account</span>
+                    <span>Follow TikTok Channel</span>
                 </a>
             </div>
         </section>
@@ -106,9 +105,9 @@
     </div>
 
     <div id="attachment-modal" class="fixed inset-0 z-50 invisible flex items-center justify-center p-4 bg-black/95 backdrop-blur-md transition-all duration-200">
-        <div class="bg-[#10131c] w-full max-w-2xl rounded-2xl border border-gray-800/80 overflow-hidden transform scale-95 opacity-0 transition-all duration-200 shadow-2xl" id="modal-card">
+        <div class="bg-[#10131c] w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl border border-gray-800/80 transform scale-95 opacity-0 transition-all duration-200 shadow-2xl" id="modal-card">
             
-            <div class="p-4 border-b border-gray-800/60 flex justify-between items-center bg-[#141924]">
+            <div class="p-4 border-b border-gray-800/60 flex justify-between items-center bg-[#141924] sticky top-0 z-20">
                 <div class="flex items-center space-x-2.5">
                     <span id="modal-gun-badge" class="text-[9px] font-black tracking-widest text-yellow-500 bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 rounded uppercase">AR</span>
                     <h3 id="modal-gun-name" class="text-lg font-black tracking-wide text-white uppercase">Gun Model</h3>
@@ -117,7 +116,7 @@
             </div>
 
             <div class="p-5 space-y-5">
-                <div class="w-full h-96 bg-[#07090d] rounded-xl flex items-center justify-center border border-gray-900 p-4 overflow-hidden relative group">
+                <div class="w-full h-64 sm:h-96 bg-[#07090d] rounded-xl flex items-center justify-center border border-gray-900 p-4 overflow-hidden relative group">
                     <div class="absolute inset-0 bg-radial-gradient from-yellow-500/5 to-transparent pointer-events-none"></div>
                     <div class="absolute top-3 right-3 z-10 bg-black/60 rounded-lg p-2 text-gray-400 pointer-events-none group-hover:text-yellow-500 transition-colors text-xs flex items-center gap-1.5 backdrop-blur-sm border border-gray-800/40">
                         <i class="fa-solid fa-magnifying-glass-plus"></i> Click to Zoom
@@ -135,15 +134,15 @@
                             <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-mobility" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 78%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Range</span><span id="stat-val-range" class="text-yellow-500 font-bold">62</span></div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Range Effective</span><span id="stat-val-range" class="text-yellow-500 font-bold">62</span></div>
                             <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-range" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 62%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Control</span><span id="stat-val-control" class="text-yellow-500 font-bold">69</span></div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Control Stability</span><span id="stat-val-control" class="text-yellow-500 font-bold">69</span></div>
                             <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-control" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 69%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Accuracy</span><span id="stat-val-accuracy" class="text-yellow-500 font-bold">71</span></div>
+                            <div class="flex justify-between text-gray-400 mb-1 font-medium"><span>Accuracy Index</span><span id="stat-val-accuracy" class="text-yellow-500 font-bold">71</span></div>
                             <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden"><div id="stat-bar-accuracy" class="bg-yellow-500 h-full rounded-full transition-all duration-500" style="width: 71%"></div></div>
                         </div>
                     </div>
@@ -181,7 +180,7 @@
 
     <script>
         const weaponData = [
-             { id: "pk", name: "Peacekeeper MK2", category: "ar", img: "img/pk.jpg", stats: {m: 88, r: 66, c: 51, a: 60}, builds: ["Muzzle: Agency Suppressor", "Barrel: TaskForce Barrel", "Stock: Agile Stock", "Underbarrel: Foregrip", "Ammunition: Double Stack Mag"] },
+            { id: "pk", name: "Peacekeeper MK2", category: "ar", img: "img/pk.jpg", stats: {m: 88, r: 66, c: 51, a: 60}, builds: ["Muzzle: Agency Suppressor", "Barrel: TaskForce Barrel", "Stock: Agile Stock", "Underbarrel: Foregrip", "Ammunition: Double Stack Mag"] },
             { id: "fr", name: "FR .556", category: "ar", img: "img/fr.jpg", stats: {m: 60, r: 56, c: 44, a: 95}, builds: ["Tactical Suppressor", "OWC Ranger", "YKM Light Stock", "Extended Mag A", "Granulated Grip Tape"] },
             { id: "hvk30", name: "HVK-30", category: "ar", img: "img/hvk.jpg", stats: {m: 78, r: 51, c: 48, a: 63}, builds: ["YKM Integral Suppressor Heavy", "YKM Combat Stock", "Sleight of Hand", "Large Caliber Ammo", "Granulated Grip Tape"] },
             { id: "kn44", name: "KN-44", category: "ar", img: "img/kn.jpg", stats: {m: 80, r: 57, c: 52, a: 63}, builds: ["Tactical Suppressor", "OWC Ranger", "No Stock", "38 Round Fast Mag", "Granulated Grip Tape"] },
@@ -215,7 +214,7 @@
             { id: "pistol", name: "Machine Pistol", category: "sec", img: "img/pistol.jpg", stats: {m: 111, r: 24, c: 60, a: 38}, builds: ["Mercury Silencer", "VDD 35MM Short", "Rapid Action", "7.62 GORENKO 40 Round Mags", "Stippled Grip"] },
             { id: "j", name: "J358", category: "sec", img: "img/j.jpg", stats: {m: 93, r: 66, c: 60, a: 71}, builds: ["MIP Light Flash Guard", "J358 Short", "Lightweight Trigger", "Topping Power Reload", "Stippled Grip Tape"] },
             { id: "acc", name: "My Account", category: "extras", img: "img/acc.jpg", builds: [":)"] },
-            { id: "ss", name: "ScoreStreaks", category: "extras", img: "img/ss.jpg", builds: ["<3"] },
+            { id: "ss", name: "ScoreStreaks", category: "extras", img: "img/ss.jpg", builds: ["<3"] }
         ];
 
         let currentCategory = 'all';
@@ -278,7 +277,7 @@
                 card.onclick = () => openModal(gun);
 
                 let statsHtml = '';
-                if (gun.id !== 'acc') {
+                if (gun.category !== 'extras') {
                     statsHtml = `
                         <div class="mt-3 pt-3 border-t border-gray-900/60 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] text-gray-400">
                             <div class="flex items-center justify-between">
@@ -400,7 +399,7 @@
             modalImg.onerror = function() { this.src = 'https://placehold.co/400x300/07090d/e2e8f0?text=' + encodeURIComponent(gun.name); };
 
             const statsPanel = document.getElementById('modal-stats-panel');
-          if (gun.category === 'extras') {
+            if (gun.category === 'extras') {
                 statsPanel.classList.add('hidden');
             } else {
                 statsPanel.classList.remove('hidden');
@@ -436,6 +435,7 @@
             });
 
             modal.classList.remove('invisible');
+            modalCard.scrollTop = 0;
             setTimeout(() => {
                 modalCard.classList.remove('scale-95', 'opacity-0');
                 modalCard.classList.add('scale-100', 'opacity-100');
